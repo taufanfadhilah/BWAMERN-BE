@@ -1,6 +1,7 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
+var cors = require("cors");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const methodOverride = require("method-override");
@@ -25,7 +26,7 @@ var adminRouter = require("./routes/admin");
 var apiRouter = require("./routes/api");
 
 var app = express();
-
+app.options("*", cors()); // include before other routes
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -49,17 +50,6 @@ app.use(
   "/sb-admin-2",
   express.static(path.join(__dirname, "node_modules/startbootstrap-sb-admin-2"))
 );
-
-// allow cors
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-  next();
-});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
